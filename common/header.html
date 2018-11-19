@@ -1,0 +1,32 @@
+<script type="text/discourse-plugin" version="0.8">
+  api.addPostMenuButton("solved", attrs => {
+    const canAccept = attrs.can_accept_answer;
+    const canUnaccept = attrs.can_unaccept_answer;
+    const accepted = attrs.accepted_answer;
+    const position = "first";
+
+    if (canAccept) {
+      return {
+        action: "acceptAnswer",
+        icon: "check-square-o",
+        className: "unaccepted",
+        title: "solved.accept_answer",
+        position
+      };
+    } else if (canUnaccept || accepted) {
+      const title = canUnaccept
+        ? "solved.unaccept_answer"
+        : "solved.accepted_answer";
+      return {
+        action: "unacceptAnswer",
+        icon: "check-square",
+        title,
+        className: "accepted fade-out",
+        position,
+        beforeButton(h) {
+          return h("span.accepted-text", I18n.t("solved.solution"));
+        }
+      };
+    }
+  });
+</script>
